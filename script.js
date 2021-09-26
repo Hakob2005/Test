@@ -1,128 +1,53 @@
-matrix = []
+function setup() {
 
-function generateMatrix(side, GrassCount, GrassEaterCount, PredatorCount){
-    
-    for (let i = 0; i < side; i++) {   
-        let arr = []   
-        matrix.push(arr)
-        for (let j = 0; j < side; j++) {   
-            matrix[i].push(0)     
-        }     
-    }
+    var socket = io();
 
-    for (let i = 0; i < GrassCount; i++) {
-        let x = Math.round(random(0, side - 1))
-        let y = Math.round(random(0, side - 1))
-        if (matrix[y][x] == 0) {
-            let gr = new Grass(x,y)
-            grassArr.push(gr)
-            matrix[y][x] = 1;
+    var side = 30;
+
+    var matrix = [];
+
+    //! Getting DOM objects (HTML elements)
+    let grassCountElement = document.getElementById('grassCount');
+    let grassEaterCountElement = document.getElementById('grassEaterCount');
+
+    //! adding socket listener on "data" <-- name, after that fire 'drawCreatures' function 
+
+    socket.on("data", drawCreatures);
+
+    function drawCreatures(data) {
+        //! after getting data pass it to matrix variable
+        matrix = data.matrix;
+        grassCountElement.innerText = data.grassCounter;
+        grassEaterCountElement.innerText = data.grassEaterCount;
+        //! Every time it creates new Canvas woth new matrix size
+        createCanvas(matrix[0].length * side, matrix.length * side)
+        //! clearing background by setting it to new grey color
+        background('#acacac');
+        //! Draw grassCount and grassEaterCount to HTML (use DOM objects to update information, yes, and use .innerText <- function)
+
+        //! Drawing and coloring RECTs
+        for (var i = 0; i < matrix.length; i++) {
+            for (var j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == 1) {
+                    fill("green");
+                    rect(j * side, i * side, side, side);
+                } else if (matrix[i][j] == 2) {
+                    fill("orange");
+                    rect(j * side, i * side, side, side);
+                } else if (matrix[i][j] == 0) {
+                    fill('#acacac');
+                    rect(j * side, i * side, side, side);
+                } else if (matrix[i][j] == 3) {
+                    fill('red');
+                    rect(j * side, i * side, side, side);
+                } else if (matrix[i][j] == 4) {
+                    fill('blue');
+                    rect(j * side, i * side, side, side);
+                } else if (matrix[i][j] == 5) {
+                    fill('yellow');
+                    rect(j * side, i * side, side, side);
+                }
+            }
         }
     }
-    for (let i = 0; i < GrassEaterCount; i++) {
-        let x = Math.round(random(0, side - 1))
-        let y = Math.round(random(0, side - 1))
-        if (matrix[y][x] == 0) {
-            let Xt = new Xotaker(x,y)
-            xotakerArr.push(Xt)
-            matrix[y][x] = 2;
-        }
-    }
-    for (let i = 0; i < PredatorCount; i++) {
-        let x = Math.round(random(0, side - 1))
-        let y = Math.round(random(0, side - 1))
-        if (matrix[y][x] == 0) {
-            let Xt = new Predator(x,y)
-            predatorArr.push(Xt)
-            matrix[y][x] = 3;
-        }
-    }
-}
-
-
-
-var side = 10
-
-grassArr = []
-xotakerArr = []
-predatorArr = []
-BomberArr = []
-BlackArr = []
-starter = []
-var start = new allStarter();
-starter.push(start);
-
-function setup(){
-    frameRate(30)
-    generateMatrix(60,300,30,20)
-    createCanvas( side * matrix[0].length   , side * matrix.length )
-    background("grey")
-    
- 
-}
-
-function draw(){
-    for(let i in grassArr){
-        grassArr[i].mul()
-    }
-
-    for(let i in xotakerArr){
-        xotakerArr[i].move()
-    }
-
-    for(let i in predatorArr){
-        predatorArr[i].move()
-    }
-
-    for(let i in BomberArr){    
-        BomberArr[i].checker()
-    }
-
-    for(let i in BlackArr){
-        BlackArr[i].move()
-    }
-    for(let i in starter){
-        starter[i].starterr()
-    }
-    
-    
-    for(let y = 0 ; y < matrix.length ; y++){
-
-        for(let x = 0 ; x < matrix[y].length; x++){
-
-            if(matrix[y][x] == 1){
-                fill("green")
-            }
-            else if(matrix[y][x] == 2){
-                fill("yellow")
-            }
-            else if(matrix[y][x] == 3){
-                fill("red")
-            }
-            else if(matrix[y][x] == 4){
-                fill("cyan")
-            }
-            else if(matrix[y][x] == 5){
-                fill("black")
-            }
-            else{
-                fill("#684C20")
-            }
-
-            
-            rect( x * side , y * side , side , side )
-            
-
-        }
-
-    }
-    
-    
-   
-    
-    
-    
-
-
-  
 }
