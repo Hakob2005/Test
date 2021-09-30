@@ -3,9 +3,8 @@ const Live = require("./Live.js");
 
 module.exports = class Bomber extends Live {
     constructor(x,y){
-        this.x = x
-        this.y = y
-        this.direction = [node
+        super(x,y)
+        this.direction = [
             [this.x - 1, this.y - 1],
             [this.x    , this.y - 1],
             [this.x + 1, this.y - 1],
@@ -35,9 +34,9 @@ module.exports = class Bomber extends Live {
             matrix[newy][newx] = 0;
             matrix[this.y][this.x] = 0;
 
-            for (let i in xotakerArr){
-                matrix[xotakerArr[i].y][xotakerArr[i].x] = 0;
-                xotakerArr.splice(i,1);
+            for (let i in grassEaterArr){
+                matrix[grassEaterArr[i].y][grassEaterArr[i].x] = 0;
+                grassEaterArr.splice(i,1);
             }
 
             for (let i in BomberArr){

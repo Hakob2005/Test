@@ -76,20 +76,18 @@ module.exports = class Xotaker extends Live {
     
     die(){
         matrix[this.y][this.x] = 0;
-        console.log("hello");
             for (var i in grassEaterArr) {
                 if (this.x == grassEaterArr[i].x && this.y == grassEaterArr[i].y) {
                     grassEaterArr.splice(i, 1)
                     break;
                 }
             }
-        console.log("hello lox");
     }
 
     mul(){
         var newCell = random(this.chooseCell(0));
 
-        if (this.energy >= 15 && newCell) {
+        if (this.energy >= 2 && newCell) {
             var newGrassEater = new Xotaker(newCell[0], newCell[1]);
             grassEaterArr.push(newGrassEater);
             matrix[newCell[1]][newCell[0]] = 2;

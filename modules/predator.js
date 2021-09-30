@@ -73,9 +73,9 @@ module.exports = class Predator extends Live{
             matrix[this.y][this.x] = 0;
             matrix[newY][newX] = 3;
 
-            for (var i in xotakerArr) {
-                if (newX == xotakerArr[i].x && newY == xotakerArr[i].y) {
-                    xotakerArr.splice(i, 1);
+            for (var i in GrassEaterArr) {
+                if (newX == GrassEaterArr[i].x && newY == GrassEaterArr[i].y) {
+                    GrassEaterArr.splice(i, 1);
                     break;
                 }
             }

@@ -1,6 +1,5 @@
 const random = require("./random");
 const Live = require("./Live.js");
-
 module.exports = class Grass extends Live{
     constructor(x,y){
         super(x,y)

@@ -1,8 +1,10 @@
 const random = require("./random");
 const Live = require("./Live.js");
-
+const Xotaker = require("./xotaker.js")
+const Predator = require("./predator.js")
 module.exports = class BlackThing extends Live {
     constructor(x,y){
+        super(x,y)
         this.energy = 30
     }
 
@@ -78,7 +80,7 @@ module.exports = class BlackThing extends Live {
                 }
 
                 let pred = new Xotaker(x,y);
-                xotakerArr.push(pred);
+                GrassEaterArr0.push(pred);
 
             } 
             this.die();
@@ -90,9 +92,9 @@ module.exports = class BlackThing extends Live {
 
                 matrix[y][x] = 3;
 
-                for (let i in xotakerArr) {
-                    if (x == xotakerArr[i].x && y == xotakerArr[i].y) {
-                        xotakerArr.splice(i, 1);
+                for (let i in GrassEaterArr) {
+                    if (x == grassEaterArr[i].x && y == grassEaterArr[i].y) {
+                        grassEaterArr.splice(i, 1);
                         break;
                     }
                 }
