@@ -1,3 +1,6 @@
+const socket = io();
+
+
 function setup() {
 
     var socket = io();
@@ -15,7 +18,6 @@ function setup() {
     socket.on("data", drawCreatures);
 
     function drawCreatures(data) {
-        console.log(data);
         //! after getting data pass it to matrix variable
         matrix = data.matrix;
         grassCountElement.innerText = data.grassCounter;
@@ -51,4 +53,8 @@ function setup() {
             }
         }
     }
+}
+
+function restart() {
+    socket.emit("restart");
 }

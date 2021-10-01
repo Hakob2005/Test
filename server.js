@@ -6,6 +6,7 @@ var Grass = require("./modules/grass.js");
 var Predator = require("./modules/predator.js");
 var GrassEater = require("./modules/xotaker.js");
 var allStarter = require("./modules/allstarter.js");
+const GameHandler = require("./modules/GameHandler.js");
 var random = require("./modules/random.js");
 //! Requiring modules  --  END
 
@@ -158,6 +159,33 @@ function Yes(){
         })
     }
 }
+
+function restart() {
+
+    gameData = new GameHandler();
+    matrix = [];
+    grassArr = [];
+    grassEaterArr = [];
+    predatorArr = [];
+    BomberArr = [];
+    BlackArr = [];
+    
+    matrixGenerator(60, 100, 30, 20, 1, 5);
+    game();
+
+    let data = {
+        matrix: matrix,
+        gameData: gameData,
+    };
+
+    io.sockets.emit("data", data);
+
+
+}
+
+io.on('connection', function (socket) {
+    socket.on("restart", restart);
+});
 
 setInterval(Yes, 100)
 setInterval(game, 100)
