@@ -2,7 +2,7 @@ function setup() {
 
     var socket = io();
 
-    var side = 30;
+    var side = 10;
 
     var matrix = [];
 

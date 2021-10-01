@@ -4,7 +4,11 @@ const Live = require("./Live.js");
 module.exports = class Xotaker extends Live {
     constructor(x,y){
         super(x,y)
-        this.energy = 13
+        this.energy = 150
+    }
+
+    getEnergy(){
+        return this.energy
     }
 
     updateDirection(){
@@ -75,7 +79,7 @@ module.exports = class Xotaker extends Live {
     }
     
     die(){
-        matrix[this.y][this.x] = 0;
+        matrix[this.y][this.x] = 0
             for (var i in grassEaterArr) {
                 if (this.x == grassEaterArr[i].x && this.y == grassEaterArr[i].y) {
                     grassEaterArr.splice(i, 1)
@@ -87,7 +91,7 @@ module.exports = class Xotaker extends Live {
     mul(){
         var newCell = random(this.chooseCell(0));
 
-        if (this.energy >= 2 && newCell) {
+        if (newCell) {
             var newGrassEater = new Xotaker(newCell[0], newCell[1]);
             grassEaterArr.push(newGrassEater);
             matrix[newCell[1]][newCell[0]] = 2;

@@ -80,7 +80,7 @@ module.exports = class BlackThing extends Live {
                 }
 
                 let pred = new Xotaker(x,y);
-                GrassEaterArr0.push(pred);
+                grassEaterArr.push(pred);
 
             } 
             this.die();
@@ -92,7 +92,7 @@ module.exports = class BlackThing extends Live {
 
                 matrix[y][x] = 3;
 
-                for (let i in GrassEaterArr) {
+                for (let i in grassEaterArr) {
                     if (x == grassEaterArr[i].x && y == grassEaterArr[i].y) {
                         grassEaterArr.splice(i, 1);
                         break;

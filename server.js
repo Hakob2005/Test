@@ -25,7 +25,6 @@ starterArr = [new allStarter()];
 
 
 
-
 //! Creating MATRIX -- START
 function matrixGenerator(matrixSize, grass, grassEater, predatorArr , BomberArr , BlackArr) {
     for (let i = 0; i < matrixSize; i++) {
@@ -49,18 +48,18 @@ function matrixGenerator(matrixSize, grass, grassEater, predatorArr , BomberArr 
         let customY = Math.floor(random(matrixSize));
         matrix[customY][customX] = 3;
     }
-    // for (let i = 0; i < BomberArr; i++) {
-    //     let customX = Math.floor(random(matrixSize));
-    //     let customY = Math.floor(random(matrixSize));
-    //     matrix[customY][customX] = 4;
-    // }
-    // for (let i = 0; i < BlackArr; i++) {
-    //     let customX = Math.floor(random(matrixSize));
-    //     let customY = Math.floor(random(matrixSize));
-    //     matrix[customY][customX] = 5;
-    // }
+    for (let i = 0; i < BomberArr; i++) {
+        let customX = Math.floor(random(matrixSize));
+        let customY = Math.floor(random(matrixSize));
+        matrix[customY][customX] = 4;
+    }
+    for (let i = 0; i < BlackArr; i++) {
+        let customX = Math.floor(random(matrixSize));
+        let customY = Math.floor(random(matrixSize));
+        matrix[customY][customX] = 5;
+    }
 }
-matrixGenerator(20, 1, 1 , 1 , 8 , 1);
+matrixGenerator(40, 5, 3 , 1 , 8 , 1);
 //! Creating MATRIX -- END
 
 
@@ -76,7 +75,7 @@ app.get('/', function (req, res) {
     res.redirect('index.html');
 });
 server.listen(3000, () => {
-    console.log("Server is running po");
+    console.log("Server is running!");
 });
 //! SERVER STUFF END  --  END
 
@@ -150,6 +149,15 @@ function game() {
     io.sockets.emit("data", sendData);
 }
 
+function Yes(){
+    if (grassEaterArr[0] !== undefined) {
+        grassEaterArr.forEach(function(i){
+            if (i.getEnergy() <= 4) {
+                i.die()
+            }
+        })
+    }
+}
 
-
-setInterval(game, 250)
+setInterval(Yes, 100)
+setInterval(game, 100)
