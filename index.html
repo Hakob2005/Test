@@ -59,15 +59,36 @@
                     երբ նրան ուտում է գիշատիչը, կամ երբ նրան այրում է կրակը:</td>
                 <td id="grassEaterCount"></td>
             </tr>
+            <tr>
+                <th scope="row">1</th>
+                <td scope="row" style="background-color:red;"></td>
+                <td>Կանաչը խոտն է, որը բազմանում է N ցիկլը մեկ,մահանում է երբ նրան ուտում է խոտակերը, կամ այրում է
+                    կրակը, կամ նրան կոխկրտում է գիշատիչը</td>
+                <td id="predCount"></td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td scope="row" style="background-color:cyan;"></td>
+                <td>:</td>
+                <td id="bomberCount"></td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td scope="row" style="background-color:black;"></td>
+                <td>Դեղինը խոտակերն է, որը բազմանում է N հատ խոտ ուտելուց հետո և մահանում է N հատ չուտելուց հետո, կամ
+                    երբ նրան ուտում է գիշատիչը, կամ երբ նրան այրում է կրակը:</td>
+                <td id="blackCount"></td>
+            </tr>
         </tbody>
     </table>
 
     <div class="events-container">
         <h4>Events Panel</h4>
-        <button class="event-button" onclick="restart()">Restart</button>
+        <button class="restart-button" onclick="restart()">Restart</button>
         <button class="event-button" onclick="restart()">Remove Grasses</button>
         <button class="event-button" onclick="restart()">Remove Grass Eaters</button>
         <button class="event-button" onclick="restart()">Remove Mutants</button>
+        <button class="AddGrass" onclick="addGrassEater()">Add Grass Eater</button>
     </div>
 
     <script src="p5.js"></script>

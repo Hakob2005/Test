@@ -4,8 +4,8 @@ var Black = require("./modules/BlackThing.js");
 var Bomb = require("./modules/Bomber.js");
 var Grass = require("./modules/grass.js");
 var Predator = require("./modules/predator.js");
-var GrassEater = require("./modules/xotaker.js");
-var allStarter = require("./modules/allstarter.js");
+var GrassEater = require("./modules/GrassEater");
+var allStarter = require("./modules/allStarter.js");
 const GameHandler = require("./modules/GameHandler.js");
 var random = require("./modules/random.js");
 //! Requiring modules  --  END
@@ -18,11 +18,14 @@ predatorArr = [];
 BomberArr = [];
 BlackArr = [];
 matrix = [];
-grassHashiv = 0;
-Herbivore = 0;
-PredatorCount = 0;
+grassHashiv = grassArr.length;
+grassEaterCount = grassEaterArr.length;
+predatorCount = predatorArr.length;
+bomberCount = BomberArr.length;
+blackCount = BlackArr.length;
 starterArr = [new allStarter()];
 //! Setting global arrays  -- END
+var MatrixSize = 40
 
 
 
@@ -60,14 +63,13 @@ function matrixGenerator(matrixSize, grass, grassEater, predatorArr , BomberArr 
         matrix[customY][customX] = 5;
     }
 }
-matrixGenerator(40, 5, 3 , 1 , 8 , 1);
+matrixGenerator(MatrixSize, 5, 3 , 1 , 8 , 1);
 //! Creating MATRIX -- END
 
 
 
 //! SERVER STUFF  --  START
 var express = require('express');
-const { start } = require("repl");
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -91,7 +93,6 @@ function creatingObjects() {
             } else if (matrix[y][x] == 1) {
                 var grass = new Grass(x, y);
                 grassArr.push(grass);
-                grassHashiv++;
             } else if (matrix[y][x] == 3) {
                 var grassEater = new Predator(x, y);
                 predatorArr.push(grassEater);
@@ -139,26 +140,44 @@ function game() {
         }
     }
 
+    //Yes()
+
     //! Object to send
     let sendData = {
         matrix: matrix,
         grassCounter: grassArr.length,
-        grassEaterCount: grassEaterArr.length
+        grassEaterCount: grassEaterArr.length,
+        predCount: predatorArr.length,
+        bomberCount: BomberArr.length,
+        blackCount: BlackArr.length,
     }
 
     //! Send data over the socket to clients who listens "data"
     io.sockets.emit("data", sendData);
 }
 
-function Yes(){
-    if (grassEaterArr[0] !== undefined) {
-        grassEaterArr.forEach(function(i){
-            if (i.getEnergy() <= 4) {
-                i.die()
-            }
-        })
-    }
-}
+// function Yes(){
+//     for (let y = 0; y < matrix.length; y++) {
+//         for (let x = 0; x < matrix[0].length; x++) {
+//             if(matrix[y][x] == 2){
+//                 if(grassEaterArr.length > 0){
+//                     for (const i in grassEaterArr) {
+//                         if(grassEaterArr[i].x == x && grassEaterArr[i].y == y) {
+//                             break
+//                         } else {
+//                             if (i == grassEaterArr.length - 1){
+//                                 matrix[y][x] = 0;
+//                             }
+//                         }
+//                     }
+//                 } else {
+//                     matrix[y][x] = 0;
+//                 }
+//             }
+//         }
+//     }
+// }
+
 
 function restart() {
 
@@ -170,8 +189,8 @@ function restart() {
     BomberArr = [];
     BlackArr = [];
     
-    matrixGenerator(60, 100, 30, 20, 1, 5);
-    game();
+    matrixGenerator(40, 5, 3 , 1 , 8 , 1);
+    creatingObjects()
 
     let data = {
         matrix: matrix,
@@ -183,9 +202,32 @@ function restart() {
 
 }
 
+function GrassEaterAdd(){
+    let number = 10
+    for (let i = 0; i < number; i++) {
+        let customX = Math.floor(random(MatrixSize));
+        let customY = Math.floor(random(MatrixSize));
+        matrix[customY][customX] = 2;
+        var grassEater = new GrassEater(customX, customY);
+        grassEaterArr.push(grassEater);
+    }
+
+    
+
+    let sendData = {
+        matrix: matrix,
+        grassCounter: grassArr.length,
+        grassEaterCount: grassEaterArr.length
+    }
+
+    game()
+
+    io.sockets.emit("data", sendData);
+}
+
 io.on('connection', function (socket) {
     socket.on("restart", restart);
+    socket.on("AddGrass", GrassEaterAdd);
 });
 
-setInterval(Yes, 100)
-setInterval(game, 100)
+setInterval(game, 250)

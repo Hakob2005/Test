@@ -1,7 +1,8 @@
 const random = require("./random");
 const Live = require("./Live.js");
-const Xotaker = require("./xotaker.js")
-const Predator = require("./predator.js")
+const Predator = require("./predator.js");
+const GrassEater = require("./GrassEater.js");
+
 module.exports = class BlackThing extends Live {
     constructor(x,y){
         super(x,y)
@@ -79,7 +80,7 @@ module.exports = class BlackThing extends Live {
                     }
                 }
 
-                let pred = new Xotaker(x,y);
+                let pred = new GrassEater(x,y);
                 grassEaterArr.push(pred);
 
             } 

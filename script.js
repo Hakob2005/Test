@@ -3,32 +3,33 @@ const socket = io();
 
 function setup() {
 
-    var socket = io();
+    
 
-    var side = 10;
+    var side = 25;
 
     var matrix = [];
 
-    //! Getting DOM objects (HTML elements)
     let grassCountElement = document.getElementById('grassCount');
     let grassEaterCountElement = document.getElementById('grassEaterCount');
+    let predatorCountElement = document.getElementById('predCount');
+    let bomberCountElement = document.getElementById('bomberCount');
+    let blackCountElement = document.getElementById('blackCount');
 
-    //! adding socket listener on "data" <-- name, after that fire 'drawCreatures' function 
 
     socket.on("data", drawCreatures);
 
     function drawCreatures(data) {
-        //! after getting data pass it to matrix variable
         matrix = data.matrix;
+
         grassCountElement.innerText = data.grassCounter;
         grassEaterCountElement.innerText = data.grassEaterCount;
-        //! Every time it creates new Canvas woth new matrix size
-        createCanvas(matrix[0].length * side, matrix.length * side)
-        //! clearing background by setting it to new grey color
-        background('#acacac');
-        //! Draw grassCount and grassEaterCount to HTML (use DOM objects to update information, yes, and use .innerText <- function)
+        predatorCountElement.innerText = data.predCount;
+        bomberCountElement.innerText = data.bomberCount;
+        blackCountElement.innerText = data.blackCount;
 
-        //! Drawing and coloring RECTs
+        createCanvas(matrix[0].length * side, matrix.length * side)
+        background('#acacac');
+
         for (var i = 0; i < matrix.length; i++) {
             for (var j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == 1) {
@@ -38,7 +39,7 @@ function setup() {
                     fill("orange");
                     rect(j * side, i * side, side, side);
                 } else if (matrix[i][j] == 0) {
-                    fill('#acacac');
+                    fill('#6b4421');
                     rect(j * side, i * side, side, side);
                 } else if (matrix[i][j] == 3) {
                     fill('red');
@@ -47,7 +48,7 @@ function setup() {
                     fill('blue');
                     rect(j * side, i * side, side, side);
                 } else if (matrix[i][j] == 5) {
-                    fill('yellow');
+                    fill('black');
                     rect(j * side, i * side, side, side);
                 }
             }
@@ -56,5 +57,11 @@ function setup() {
 }
 
 function restart() {
-    socket.emit("restart");
+    let restart = document.querySelector(".restart-button")
+    restart.addEventListener("click", socket.emit("restart"))
+    
+}
+function addGrassEater() {
+    let restart = document.querySelector(".AddGrass")
+    restart.addEventListener("click", socket.emit("AddGrass"))
 }
