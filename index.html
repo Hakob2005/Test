@@ -4,6 +4,12 @@
     <meta charset="utf8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Hind+Siliguri:wght@300&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
     <style>
         canvas {
             display: block;
@@ -23,73 +29,75 @@
             font-family: 'Noto Sans', sans-serif !important;
         }
     </style>
-    </style>
+
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-base.min.js"></script>
+
 </head>
 
 <body>
 
 
-    <table class="table table-hover">
-        <thead>
+    <table class="table-table-hover">
+        <thead class="thead">
             <tr>
                 <h1>Ծրագրավորում III Երևան</h1>
             </tr>
             <tr>
                 <h1>Անուն Ազգանուն</h1>
             </tr>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Գույն</th>
-                <th scope="col">Նկարագրություն</th>
-                <th scope="col">Ծնվել է</th>
+            <tr id="First">
+                <th scope="col" >#</th>
+                <th scope="col" >Գույն</th>
+                <th scope="col" >Նկարագրություն</th>
+                <th scope="col" >Ծնվել է</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td scope="row" style="background-color:green;"></td>
-                <td>Կանաչը խոտն է, որը բազմանում է N ցիկլը մեկ,մահանում է երբ նրան ուտում է խոտակերը, կամ այրում է
+        <tbody class="list">
+            <tr class="trs">
+                <th class="td" scope="row">1</th>
+                <td class="td" scope="row" style="background-color:green;"></td>
+                <td class="td">Կանաչը խոտն է, որը բազմանում է N ցիկլը մեկ,մահանում է երբ նրան ուտում է խոտակերը, կամ այրում է
                     կրակը, կամ նրան կոխկրտում է գիշատիչը</td>
-                <td id="grassCount"></td>
+                <td class="td" id="grassCount"></td>
             </tr>
-            <tr>
+            <tr class="trs">
                 <th scope="row">2</th>
                 <td scope="row" style="background-color:orange;"></td>
-                <td>Դեղինը խոտակերն է, որը բազմանում է N հատ խոտ ուտելուց հետո և մահանում է N հատ չուտելուց հետո, կամ
+                <td class="infoText">Դեղինը խոտակերն է, որը բազմանում է N հատ խոտ ուտելուց հետո և մահանում է N հատ չուտելուց հետո, կամ
                     երբ նրան ուտում է գիշատիչը, կամ երբ նրան այրում է կրակը:</td>
                 <td id="grassEaterCount"></td>
             </tr>
-            <tr>
-                <th scope="row">1</th>
+            <tr class="trs">
+                <th scope="row">3</th>
                 <td scope="row" style="background-color:red;"></td>
-                <td>Կանաչը խոտն է, որը բազմանում է N ցիկլը մեկ,մահանում է երբ նրան ուտում է խոտակերը, կամ այրում է
+                <td class="infoText">Կանաչը խոտն է, որը բազմանում է N ցիկլը մեկ,մահանում է երբ նրան ուտում է խոտակերը, կամ այրում է
                     կրակը, կամ նրան կոխկրտում է գիշատիչը</td>
                 <td id="predCount"></td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
+            <tr class="trs">
+                <th scope="row">4</th>
                 <td scope="row" style="background-color:cyan;"></td>
-                <td>:</td>
+                <td class="infoText">This thing will kill everyone whoever touches it</td>
                 <td id="bomberCount"></td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
+            <tr class="trs">
+                <th scope="row">5</th>
                 <td scope="row" style="background-color:black;"></td>
-                <td>Դեղինը խոտակերն է, որը բազմանում է N հատ խոտ ուտելուց հետո և մահանում է N հատ չուտելուց հետո, կամ
+                <td class="infoText">Դեղինը խոտակերն է, որը բազմանում է N հատ խոտ ուտելուց հետո և մահանում է N հատ չուտելուց հետո, կամ
                     երբ նրան ուտում է գիշատիչը, կամ երբ նրան այրում է կրակը:</td>
                 <td id="blackCount"></td>
             </tr>
         </tbody>
     </table>
 
-    <div class="events-container">
-        <h4>Events Panel</h4>
-        <button class="restart-button" onclick="restart()">Restart</button>
-        <button class="event-button" onclick="restart()">Remove Grasses</button>
-        <button class="event-button" onclick="restart()">Remove Grass Eaters</button>
-        <button class="event-button" onclick="restart()">Remove Mutants</button>
-        <button class="AddGrass" onclick="addGrassEater()">Add Grass Eater</button>
+    <div class="MainButtons">
+        <div class="buttons">
+            <h4>Events Panel</h4>
+            <button class="btn" id="restart-button" onclick="restart()">Restart</button>
+            <button class="btn" id ="AddGrass" onclick="addGrassEater()">Add Grass Eater</button>
+        </div>
     </div>
+    <div id="container"></div>
 
     <script src="p5.js"></script>
     <script src="/socket.io/socket.io.js"></script>

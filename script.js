@@ -3,8 +3,6 @@ const socket = io();
 
 function setup() {
 
-    
-
     var side = 25;
 
     var matrix = [];
@@ -57,11 +55,11 @@ function setup() {
 }
 
 function restart() {
-    let restart = document.querySelector(".restart-button")
+    let restart = document.querySelector("#restart-button")
     restart.addEventListener("click", socket.emit("restart"))
     
 }
 function addGrassEater() {
-    let restart = document.querySelector(".AddGrass")
+    let restart = document.querySelector("#AddGrass")
     restart.addEventListener("click", socket.emit("AddGrass"))
 }

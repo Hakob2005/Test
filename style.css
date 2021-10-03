@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Hind+Siliguri:wght@300&family=Teko&display=swap');
+
+
+
+
+#First {
+    background-color: lightgrey;
+}
+
+:root{
+    --primary: rgba(rgb(102, 50, 50) , 0.1);
+    --secondary: rgba(rgb(241, 0, 0), 0.1);
+}
+
+.buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttons:nth-child(1){
+    letter-spacing: 1px;
+    font-family: 'Bebas Neue', cursive;
+    display: flex;
+    justify-self: center;
+    margin: none;
+}
+
+.MainButtons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-start;
+    margin-left: 10vh;
+    width: 120px;
+    height: 200px;
+}
+
+.btn{
+    font-family: 'Teko', sans-serif;
+    padding: 5px 10px 5px 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background-color: #ff815e;;
+    border: 2px solid #cc6a4f;;
+    cursor: pointer;
+    width: 20vh;
+    transition: 0.25s ;
+    user-select: none;
+    margin-top: 15px;
+}
+
+.btn:hover{
+    box-shadow: 0 6px 18px 0 rgba(#ff815e, 0.1);
+    color: #ff815e;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.table-table-hover{
+    height: 20vh;
+    width: 100%;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}

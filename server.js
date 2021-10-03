@@ -1,12 +1,12 @@
 
 //! Requiring modules  --  START
-var Black = require("./modules/BlackThing.js");
-var Bomb = require("./modules/Bomber.js");
-var Grass = require("./modules/grass.js");
-var Predator = require("./modules/predator.js");
-var GrassEater = require("./modules/GrassEater");
-var allStarter = require("./modules/allStarter.js");
-const GameHandler = require("./modules/GameHandler.js");
+const Black = require("./modules/BlackThing.js");
+const Bomb = require("./modules/Bomber.js");
+const Grass = require("./modules/grass.js");
+const Predator = require("./modules/predator.js");
+const GrassEater = require("./modules/GrassEater");
+const allStarter = require("./modules/allStarter.js");
+const season = require("./modules/seasonHandler.js");
 var random = require("./modules/random.js");
 //! Requiring modules  --  END
 
@@ -18,14 +18,18 @@ predatorArr = [];
 BomberArr = [];
 BlackArr = [];
 matrix = [];
+currentSeason = 0
 grassHashiv = grassArr.length;
 grassEaterCount = grassEaterArr.length;
 predatorCount = predatorArr.length;
 bomberCount = BomberArr.length;
 blackCount = BlackArr.length;
+seasonArr = [new season()]
 starterArr = [new allStarter()];
 //! Setting global arrays  -- END
 var MatrixSize = 40
+
+
 
 
 
@@ -139,6 +143,14 @@ function game() {
             starterArr[i].starterr();
         }
     }
+    if (seasonArr[0] !== undefined) {
+        for (var i in seasonArr) {
+            let seasoning = seasonArr[i].objectColor("grass")
+            // console.log("Season: " + seasoning.currentSeason);
+        }
+    }
+
+    seasonArr[0].mainFunction()
 
     //Yes()
 
@@ -180,8 +192,6 @@ function game() {
 
 
 function restart() {
-
-    gameData = new GameHandler();
     matrix = [];
     grassArr = [];
     grassEaterArr = [];
@@ -194,7 +204,11 @@ function restart() {
 
     let data = {
         matrix: matrix,
-        gameData: gameData,
+        grassCounter: grassArr.length,
+        grassEaterCount: grassEaterArr.length,
+        predCount: predatorArr.length,
+        bomberCount: BomberArr.length,
+        blackCount: BlackArr.length,
     };
 
     io.sockets.emit("data", data);
@@ -217,10 +231,12 @@ function GrassEaterAdd(){
     let sendData = {
         matrix: matrix,
         grassCounter: grassArr.length,
-        grassEaterCount: grassEaterArr.length
-    }
+        grassEaterCount: grassEaterArr.length,
+        predCount: predatorArr.length,
+        bomberCount: BomberArr.length,
+        blackCount: BlackArr.length,
+    };
 
-    game()
 
     io.sockets.emit("data", sendData);
 }
@@ -230,4 +246,9 @@ io.on('connection', function (socket) {
     socket.on("AddGrass", GrassEaterAdd);
 });
 
+function ChangingSeasons(){
+    seasonArr[0].changeSeason()
+}
+
+setInterval(ChangingSeasons,1000)
 setInterval(game, 250)
