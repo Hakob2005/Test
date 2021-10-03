@@ -7,6 +7,7 @@ const Predator = require("./modules/predator.js");
 const GrassEater = require("./modules/GrassEater");
 const allStarter = require("./modules/allStarter.js");
 const season = require("./modules/seasonHandler.js");
+const EntityCount = require("./modules/EntityHandler.js");
 var random = require("./modules/random.js");
 //! Requiring modules  --  END
 
@@ -28,6 +29,8 @@ seasonArr = [new season()]
 starterArr = [new allStarter()];
 //! Setting global arrays  -- END
 var MatrixSize = 40
+
+entitycount = new EntityCount();
 
 
 
@@ -150,6 +153,12 @@ function game() {
         }
     }
 
+    entitycount.count.grassCount = grassArr.length;
+    entitycount.count.grasseaterCount = grassEaterArr.length;
+    entitycount.count.predatorCount = predatorArr.length;
+    entitycount.count.bombCount = BomberArr.length;
+    entitycount.count.blackCount = BlackArr.length;
+
     seasonArr[0].mainFunction()
 
     //Yes()
@@ -164,7 +173,6 @@ function game() {
         blackCount: BlackArr.length,
     }
 
-    //! Send data over the socket to clients who listens "data"
     io.sockets.emit("data", sendData);
 }
 
@@ -244,11 +252,63 @@ function GrassEaterAdd(){
 io.on('connection', function (socket) {
     socket.on("restart", restart);
     socket.on("AddGrass", GrassEaterAdd);
+    socket.on("changeChart",setupChart)
 });
 
 function ChangingSeasons(){
     seasonArr[0].changeSeason()
 }
 
-setInterval(ChangingSeasons,1000)
+function setupChart(){
+    const data = {
+        labels: Object.keys(entitycount.count),
+        datasets: [{
+            label: 'Entity count',
+            data: [
+                   entitycount.count.grassCount,
+                   entitycount.count.grasseaterCount,
+                   entitycount.count.predatorCount,
+                   entitycount.count.bombCount,
+                   entitycount.count.blackCount
+                  ],
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(201, 203, 207, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgb(75, 192, 192)',
+                'rgb(255, 205, 86)',
+                'rgb(255, 99, 132)',
+                'rgb(201, 203, 207)',
+                'rgb(255, 159, 64)',
+            ],
+            borderWidth: 0,
+            hoverOffset: 4,
+          }]
+    }
+    const plugin = {
+        id: 'custom_canvas_background_color',
+        beforeDraw: (chart) => {
+          const ctx = chart.canvas.getContext('2d');
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = 'lightGreen';
+          ctx.fillRect(0, 0, chart.width, chart.height);
+          ctx.restore();
+        }
+      };
+
+      sendData = {
+          data: data,
+          plugin: plugin
+      }
+
+    io.sockets.emit("chart", sendData);
+    
+}
+
+setInterval(ChangingSeasons,5000)
 setInterval(game, 250)

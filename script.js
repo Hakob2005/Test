@@ -1,5 +1,6 @@
 const socket = io();
-
+let Mychart;
+let i = 0;
 
 function setup() {
 
@@ -16,6 +17,50 @@ function setup() {
 
     socket.on("data", drawCreatures);
 
+    socket.on("chart", (data) => {
+        if(i == 0){
+            i++;
+            Mychart = new Chart(document.querySelector("#countChart"), {
+                type:"bar",
+                data: data.data,
+                options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        font: {
+                                            size: 30
+                                        }
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        font: {
+                                            size: 20
+                                        }
+                                    }
+                                },
+                            },
+                            responsive: false,
+                        },
+                    plugins: [plugin = {
+                        id: 'custom_canvas_background_color',
+                        beforeDraw: (chart) => {
+                          const ctx = chart.canvas.getContext('2d');
+                          ctx.save();
+                          ctx.globalCompositeOperation = 'destination-over';
+                          ctx.fillStyle = 'white';
+                          ctx.fillRect(0, 0, chart.width, chart.height);
+                          ctx.restore();
+                        }
+                      }]
+                });
+        } else {
+            Mychart.data.datasets[0].data = data.data.datasets[0].data;
+            Mychart.update();
+        }
+    })
+
     function drawCreatures(data) {
         matrix = data.matrix;
 
@@ -24,6 +69,8 @@ function setup() {
         predatorCountElement.innerText = data.predCount;
         bomberCountElement.innerText = data.bomberCount;
         blackCountElement.innerText = data.blackCount;
+
+        socket.emit("changeChart")
 
         createCanvas(matrix[0].length * side, matrix.length * side)
         background('#acacac');
@@ -43,7 +90,7 @@ function setup() {
                     fill('red');
                     rect(j * side, i * side, side, side);
                 } else if (matrix[i][j] == 4) {
-                    fill('blue');
+                    fill('cyan');
                     rect(j * side, i * side, side, side);
                 } else if (matrix[i][j] == 5) {
                     fill('black');
