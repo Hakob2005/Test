@@ -6,12 +6,14 @@ const Grass = require("./modules/grass.js");
 const Predator = require("./modules/predator.js");
 const GrassEater = require("./modules/GrassEater");
 const allStarter = require("./modules/allStarter.js");
-const season = require("./modules/seasonHandler.js");
 const EntityCount = require("./modules/EntityHandler.js");
+const seasonHandler = require("./modules/seasonHandler.js");
 var random = require("./modules/random.js");
+const fs = require("fs");
 //! Requiring modules  --  END
 
 
+let noeldeyzel = new seasonHandler()
 //! Setting global arrays  --  START
 grassArr = [];
 grassEaterArr = [];
@@ -25,10 +27,16 @@ grassEaterCount = grassEaterArr.length;
 predatorCount = predatorArr.length;
 bomberCount = BomberArr.length;
 blackCount = BlackArr.length;
-seasonArr = [new season()]
 starterArr = [new allStarter()];
 //! Setting global arrays  -- END
 var MatrixSize = 40
+
+seasons = {
+    Winter: "Winter",
+    Spring: "Spring",
+    Summer: "Summer",
+    Autumn: "Autumn"
+}
 
 entitycount = new EntityCount();
 
@@ -89,7 +97,14 @@ server.listen(3000, () => {
 });
 //! SERVER STUFF END  --  END
 
-
+function changeSeason(seasonId) {
+    const seasonIds = Object.keys(seasons); 
+    seasonIds.forEach(season => {
+        if(season == seasonId){
+            io.sockets.emit("season", noeldeyzel.noel(season));
+        }
+    });
+}
 
 function creatingObjects() {
     for (var y = 0; y < matrix.length; y++) {
@@ -146,21 +161,12 @@ function game() {
             starterArr[i].starterr();
         }
     }
-    if (seasonArr[0] !== undefined) {
-        for (var i in seasonArr) {
-            let seasoning = seasonArr[i].objectColor("grass")
-            // console.log("Season: " + seasoning.currentSeason);
-        }
-    }
 
     entitycount.count.grassCount = grassArr.length;
     entitycount.count.grasseaterCount = grassEaterArr.length;
     entitycount.count.predatorCount = predatorArr.length;
     entitycount.count.bombCount = BomberArr.length;
     entitycount.count.blackCount = BlackArr.length;
-
-    seasonArr[0].mainFunction()
-
     //Yes()
 
     //! Object to send
@@ -176,27 +182,19 @@ function game() {
     io.sockets.emit("data", sendData);
 }
 
-// function Yes(){
-//     for (let y = 0; y < matrix.length; y++) {
-//         for (let x = 0; x < matrix[0].length; x++) {
-//             if(matrix[y][x] == 2){
-//                 if(grassEaterArr.length > 0){
-//                     for (const i in grassEaterArr) {
-//                         if(grassEaterArr[i].x == x && grassEaterArr[i].y == y) {
-//                             break
-//                         } else {
-//                             if (i == grassEaterArr.length - 1){
-//                                 matrix[y][x] = 0;
-//                             }
-//                         }
-//                     }
-//                 } else {
-//                     matrix[y][x] = 0;
-//                 }
-//             }
-//         }
-//     }
-// }
+function writeStatistics() {
+    let gameData = {
+        GrassCount: grassArr.length,
+        GrassEaterCount: grassEaterArr.length,
+        PredatorCount: predatorArr.length,
+        BomberCount: BomberArr.length,
+        BlackCount: BlackArr.length,
+    }
+
+    fs.writeFile("statistics.json", JSON.stringify(gameData), function () {
+        console.log("Updated stats");
+    });
+}
 
 
 function restart() {
@@ -253,11 +251,9 @@ io.on('connection', function (socket) {
     socket.on("restart", restart);
     socket.on("AddGrass", GrassEaterAdd);
     socket.on("changeChart",setupChart)
+    socket.on("changeSeason",changeSeason)
 });
 
-function ChangingSeasons(){
-    seasonArr[0].changeSeason()
-}
 
 function setupChart(){
     const data = {
@@ -310,5 +306,5 @@ function setupChart(){
     
 }
 
-setInterval(ChangingSeasons,5000)
+setInterval(writeStatistics, 250 * 60);
 setInterval(game, 250)
